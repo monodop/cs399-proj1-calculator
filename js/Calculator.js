@@ -20,13 +20,17 @@ export class Calculator extends Component {
         super(props);
 
         this.state = {
-            currentEquation: "17+32",
+            currentEquation: "",
             isResult: false
         };
     }
 
     onSettingsClicked() {
-        // TODO: Open Settings Menu
+        this.props.onSettings();
+    }
+
+    onHistoryClicked() {
+        this.props.onHistory();
     }
 
     calculateResult(exp) {
@@ -119,7 +123,7 @@ export class Calculator extends Component {
                     isResult={this.state.isResult}
                     calcFunction={this.calculateResult.bind(this)}
                 />
-                <TouchableNativeFeedback>
+                <TouchableNativeFeedback onPress={this.onHistoryClicked.bind(this)}>
                     <View style={styles.historyButton}>
                         <Text style={styles.historyButtonText}>History</Text>
                     </View>
@@ -129,6 +133,11 @@ export class Calculator extends Component {
         );
     }
 }
+
+Calculator.propTypes = {
+    onHistory: React.PropTypes.func.isRequired,
+    onSettings: React.PropTypes.func.isRequired
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -145,6 +154,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#3D75DB',
         margin: 10,
         marginTop: 0,
+        marginBottom: 5,
         padding: 10,
         justifyContent: 'center',
         alignItems: 'center'
