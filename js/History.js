@@ -9,7 +9,8 @@ import {
     StyleSheet,
     Text,
     View,
-    ScrollView
+    ScrollView,
+    BackAndroid
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -17,10 +18,21 @@ export class History extends Component {
 
     constructor(props) {
         super(props);
+
+        this.onBackClickedEH = this.onBackClicked.bind(this);
+    }
+
+    componentDidMount() {
+        BackAndroid.addEventListener("hardwareBackPress", this.onBackClickedEH);
+    }
+
+    componentWillUnmount() {
+        BackAndroid.removeEventListener("hardwareBackPress", this.onBackClickedEH);
     }
 
     onBackClicked() {
         this.props.onBack();
+        return true;
     }
 
     render() {
@@ -34,12 +46,15 @@ export class History extends Component {
                 />
                 <ScrollView>
                     {this.props.historyItems.map(function(item, i) {
+                        let result = item.result;
+                        if (result === null)
+                            result = "Syntax Error";
+                        else if (result.toString().includes("Infinity"))
+                            result = "Error: Division by zero";
                         return (
                             <View key={i} style={styles.row}>
                                 <Text style={styles.equation}>{item.equation}</Text>
-                                {item.result === null ? null :
-                                    <Text style={styles.result}>{item.result}</Text>
-                                }
+                                <Text style={styles.result}>{result}</Text>
                             </View>
                         );
                     })}

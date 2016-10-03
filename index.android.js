@@ -31,7 +31,7 @@ class cs399_proj1_calculator extends Component {
 
     onAddHistoryItem(equation, result) {
         let items = this.state.historyItems;
-        items.push({
+        items.unshift({
             equation: equation,
             result: result
         });
@@ -54,17 +54,9 @@ class cs399_proj1_calculator extends Component {
             case "calc":
                 return (
                     <Calculator
-                        onSettings={this.onScreenPush.bind(this, "settings", navigator)}
                         onHistory={this.onScreenPush.bind(this, "history", navigator)}
                         onHistoryItemAdded={this.onAddHistoryItem.bind(this)}
                     />
-                );
-            case "settings":
-                // TODO: render settings
-                return (
-                    <View>
-                        <Text>404 Not Found</Text>
-                    </View>
                 );
             case "history":
                 // TODO: render history

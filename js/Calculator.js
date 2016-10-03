@@ -8,11 +8,13 @@ import {
     TouchableNativeFeedback,
     StyleSheet,
     Text,
-    View
+    View,
+    BackAndroid
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CalcScreen from './Calculator/CalcScreen';
 import CalcButtons from './Calculator/CalcButtons';
+import Sound from 'react-native-sound';
 
 export class Calculator extends Component {
 
@@ -23,10 +25,29 @@ export class Calculator extends Component {
             currentEquation: "",
             isResult: false
         };
+
+        this.clackSound = new Sound('keyboard_clack.wav', Sound.MAIN_BUNDLE, (error) => {
+            if (error) {
+                // TODO: Do something?
+                console.log("Unable to load keyboard clack.");
+            }
+        });
+        this.clackSound.setVolume(1.0);
     }
 
-    onSettingsClicked() {
-        this.props.onSettings();
+    componentWillMount() {
+        this.listenForBackButton();
+    }
+
+    componentWillUnmount() {
+        this.stopListeningForBackButton();
+    }
+
+    listenForBackButton() {
+        BackAndroid.addEventListener("hardwareBackPress", BackAndroid.exitApp);
+    }
+    stopListeningForBackButton() {
+        BackAndroid.removeEventListener("hardwareBackPress", BackAndroid.exitApp);
     }
 
     onHistoryClicked() {
@@ -46,6 +67,13 @@ export class Calculator extends Component {
     }
 
     onCalcButtonClick(buttonName) {
+
+        this.clackSound.play((success) => {
+            if (!success) {
+                console.log("Unable to play keyboard clack sound.");
+            }
+        });
+
         if (buttonName == "DEL") {
             if (this.state.currentEquation.includes("Infinity")) {
                 this.setState({
@@ -121,8 +149,6 @@ export class Calculator extends Component {
                 <Icon.ToolbarAndroid
                     style={styles.toolbar}
                     title="Clackulator"
-                    navIconName="bars"
-                    onIconClicked={this.onSettingsClicked.bind(this)}
                 />
                 <CalcScreen
                     value={this.state.currentEquation}
@@ -142,7 +168,6 @@ export class Calculator extends Component {
 
 Calculator.propTypes = {
     onHistory: React.PropTypes.func.isRequired,
-    onSettings: React.PropTypes.func.isRequired,
     onHistoryItemAdded: React.PropTypes.func.isRequired
 };
 
