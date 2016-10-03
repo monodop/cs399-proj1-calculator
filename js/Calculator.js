@@ -61,6 +61,7 @@ export class Calculator extends Component {
             }
         } else if (buttonName == "=") {
             let res = this.calculateResult(this.state.currentEquation);
+            this.props.onHistoryItemAdded(this.state.currentEquation, res);
             this.setState({
                 currentEquation: res !== null ? res.toString() : "",
                 isResult: true
@@ -72,6 +73,11 @@ export class Calculator extends Component {
             });
         } else {
             if (this.state.currentEquation.includes("Infinity")) {
+                this.setState({
+                    currentEquation: buttonName,
+                    isResult: false
+                });
+            } else if (this.state.isResult && (buttonName == "." || /^\d$/.test(buttonName))) {
                 this.setState({
                     currentEquation: buttonName,
                     isResult: false
@@ -136,7 +142,8 @@ export class Calculator extends Component {
 
 Calculator.propTypes = {
     onHistory: React.PropTypes.func.isRequired,
-    onSettings: React.PropTypes.func.isRequired
+    onSettings: React.PropTypes.func.isRequired,
+    onHistoryItemAdded: React.PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({

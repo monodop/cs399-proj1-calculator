@@ -15,16 +15,7 @@ class cs399_proj1_calculator extends Component {
         super(props);
 
         this.state = {
-            historyItems: [
-                {
-                    equation: "38+10",
-                    result: "48"
-                },
-                {
-                    equation: "100-50",
-                    result: "50"
-                }
-            ]
+            historyItems: []
         }
     }
 
@@ -38,10 +29,21 @@ class cs399_proj1_calculator extends Component {
         navigator.pop();
     }
 
+    onAddHistoryItem(equation, result) {
+        let items = this.state.historyItems;
+        items.push({
+            equation: equation,
+            result: result
+        });
+        this.setState({
+            historyItems: items
+        });
+    }
+
     render() {
         return (
             <Navigator
-                initialRoute={{id: 'history'}}
+                initialRoute={{id: 'calc'}}
                 renderScene={this.renderScene.bind(this)}
             />
         );
@@ -54,6 +56,7 @@ class cs399_proj1_calculator extends Component {
                     <Calculator
                         onSettings={this.onScreenPush.bind(this, "settings", navigator)}
                         onHistory={this.onScreenPush.bind(this, "history", navigator)}
+                        onHistoryItemAdded={this.onAddHistoryItem.bind(this)}
                     />
                 );
             case "settings":
