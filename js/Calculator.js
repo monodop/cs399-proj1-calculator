@@ -5,40 +5,69 @@
 import React, { Component } from 'react';
 import {
     AppRegistry,
+    TouchableNativeFeedback,
     StyleSheet,
     Text,
     View
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import CalcScreen from './Calculator/CalcScreen';
+import CalcButtons from './Calculator/CalcButtons';
 
 export class Calculator extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            currentEquation: "17+32"
+        };
+    }
 
     onSettingsClicked() {
         // TODO: Open Settings Menu
     }
 
     render() {
+
+        let buttons = [
+            "(",
+            ")",
+            "DEL",
+            "x",
+            "7",
+            "8",
+            "9",
+            "/",
+            "4",
+            "5",
+            "6",
+            "+",
+            "1",
+            "2",
+            "3",
+            "-",
+            "0",
+            ".",
+            "(-)",
+            "="
+        ];
+
         return (
             <View style={styles.container}>
                 <Icon.ToolbarAndroid
                     style={styles.toolbar}
                     title="Clackulator"
                     navIconName="bars"
-                    onIconClicked={this.onSettingsClicked}
+                    onIconClicked={this.onSettingsClicked.bind(this)}
                 />
-                <Text style={styles.welcome}>
-                    Welcome to React Native! Hello, I am harrison!
-                </Text>
-                <Text style={styles.instructions}>
-                    To get started, edit index.android.js
-                </Text>
-                <Text style={styles.instructions} onClick={this.onClick}>
-                    Double tap R on your keyboard to reload,{'\n'}
-                    Shake or press menu button for dev menu
-                </Text>
-                <Text style={styles.annoying}>
-                    Check out my sick calculator!
-                </Text>
+                <CalcScreen value={this.state.currentEquation}/>
+                <TouchableNativeFeedback>
+                    <View style={styles.historyButton}>
+                        <Text style={styles.historyButtonText}>History</Text>
+                    </View>
+                </TouchableNativeFeedback>
+                <CalcButtons buttons={buttons} />
             </View>
         );
     }
@@ -51,27 +80,22 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         backgroundColor: '#F5FCFF',
     },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
-    annoying: {
-        textAlign: 'right',
-        color: '#000000',
-        marginBottom: 5,
-        backgroundColor: '#ff0000',
-        padding: 100
-    },
     toolbar: {
         height: 56,
         backgroundColor: '#e9eaed'
+    },
+    historyButton: {
+        backgroundColor: '#3D75DB',
+        margin: 10,
+        marginTop: 0,
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    historyButtonText: {
+        fontSize: 20
     }
 });
 
+export { CalcScreen, CalcButtons };
 export default Calculator;
