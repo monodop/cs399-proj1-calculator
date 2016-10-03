@@ -15,9 +15,18 @@ export class CalcScreen extends Component {
 
     render() {
         let displayText = this.props.value;
+        let evald = " ";
+        if (this.props.value.length > 0) {
+            try {
+                eval("evald=" + this.props.value);
+            } catch (e) {
+                evald=" ";
+            }
+        }
         return (
             <View style={styles.container}>
                 <Text style={styles.text}>{displayText}</Text>
+                <Text style={styles.preview}>{evald}</Text>
             </View>
         );
     }
@@ -37,6 +46,10 @@ const styles = StyleSheet.create({
     text: {
         marginRight: 20,
         fontSize: 30
+    },
+    preview: {
+        marginRight: 20,
+        fontSize: 20
     }
 });
 

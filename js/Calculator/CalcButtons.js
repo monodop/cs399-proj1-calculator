@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import {
     AppRegistry,
+    TouchableNativeFeedback,
     StyleSheet,
     Text,
     View
@@ -11,6 +12,10 @@ export class CalcButtons extends Component {
 
     constructor(props) {
         super(props);
+    }
+
+    onButtonClick(buttonName, event) {
+        this.props.onClick(buttonName);
     }
 
     render() {
@@ -46,20 +51,23 @@ export class CalcButtons extends Component {
                                     buttonStyle.backgroundColor = '#3D75DB';
                                 }
                                 return (
-                                    <View key={button} style={buttonStyle}>
-                                        <Text style={styles.buttonText}>{button}</Text>
-                                    </View>
+                                    <TouchableNativeFeedback key={button} onPress={this.onButtonClick.bind(this, button)}>
+                                        <View style={buttonStyle}>
+                                            <Text style={styles.buttonText}>{button}</Text>
+                                        </View>
+                                    </TouchableNativeFeedback>
                                 );
-                            })}
+                            }.bind(this))}
                         </View>
                     );
-                })}
+                }.bind(this))}
             </View>
         );
     }
 }
 CalcButtons.propTypes = {
-    buttons: React.PropTypes.arrayOf(React.PropTypes.string).isRequired
+    buttons: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+    onClick: React.PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({

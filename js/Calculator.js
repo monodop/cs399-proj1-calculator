@@ -28,29 +28,51 @@ export class Calculator extends Component {
         // TODO: Open Settings Menu
     }
 
+    onCalcButtonClick(buttonName) {
+        if (buttonName == "DEL") {
+            if (this.state.currentEquation.length > 0) {
+                this.setState({
+                    currentEquation: this.state.currentEquation.substring(0, this.state.currentEquation.length - 1)
+                });
+            }
+        } else if (buttonName == "=") {
+            this.setState({
+                currentEquation: ""
+            });
+        } else if (buttonName == "C") {
+            this.setState({
+                currentEquation: ""
+            });
+        } else {
+            this.setState({
+                currentEquation: this.state.currentEquation + buttonName
+            });
+        }
+    }
+
     render() {
 
         let buttons = [
+            "C",
             "(",
             ")",
             "DEL",
-            "x",
             "7",
             "8",
             "9",
-            "/",
+            "*",
             "4",
             "5",
             "6",
-            "+",
+            "/",
             "1",
             "2",
             "3",
-            "-",
+            "+",
             "0",
             ".",
-            "(-)",
-            "="
+            "=",
+            "-"
         ];
 
         return (
@@ -67,7 +89,7 @@ export class Calculator extends Component {
                         <Text style={styles.historyButtonText}>History</Text>
                     </View>
                 </TouchableNativeFeedback>
-                <CalcButtons buttons={buttons} />
+                <CalcButtons buttons={buttons} onClick={this.onCalcButtonClick.bind(this)} />
             </View>
         );
     }
