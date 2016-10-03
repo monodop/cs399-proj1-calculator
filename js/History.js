@@ -14,27 +14,44 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+/**
+ * Displays the history screen in the calculator app
+ */
 export class History extends Component {
 
     constructor(props) {
         super(props);
 
+        // An event handler for the back button clicked - used by the component mounting and unmounting callbacks
         this.onBackClickedEH = this.onBackClicked.bind(this);
     }
 
+    /**
+     * Called when the component has completed mounting - Start listening for back button presses (to exit the screen)
+     */
     componentDidMount() {
         BackAndroid.addEventListener("hardwareBackPress", this.onBackClickedEH);
     }
 
+    /**
+     * Called before the component unmounts - Stop listening for back button presses (to exit the screen)
+     */
     componentWillUnmount() {
         BackAndroid.removeEventListener("hardwareBackPress", this.onBackClickedEH);
     }
 
+    /**
+     * Called when the back button has been pressed: either hardware back or the back button on the toolbar
+     * @returns {boolean}
+     */
     onBackClicked() {
         this.props.onBack();
         return true;
     }
 
+    /**
+     * Render the component
+     */
     render() {
         return (
             <View style={styles.container}>

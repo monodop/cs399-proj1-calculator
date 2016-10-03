@@ -7,19 +7,28 @@ import {
     View
 } from 'react-native';
 
+/**
+ * Renders the display screen in the calculator
+ */
 export class CalcScreen extends Component {
 
     constructor(props) {
         super(props);
     }
 
+    /**
+     * Render the component
+     */
     render() {
+        // Compute what will be rendered for the current equation
         let displayText = this.props.value;
         if (this.props.isResult && displayText.length == 0) {
             displayText = "Syntax Error";
         } else if (displayText.includes("Infinity")) {
             displayText = "Error: Division by zero";
         }
+
+        // Compute what will be rendered for the preview
         let evald = this.props.calcFunction(this.props.value);
         if (evald === null) {
             evald = " ";
@@ -27,6 +36,8 @@ export class CalcScreen extends Component {
         if (evald.toString().includes("Infinity")) {
             evald = "Error: Division by zero";
         }
+
+        // Render the result
         return (
             <View style={styles.container}>
                 <Text style={styles.text}>{displayText}</Text>

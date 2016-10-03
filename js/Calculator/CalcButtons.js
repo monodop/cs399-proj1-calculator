@@ -8,18 +8,31 @@ import {
     View
 } from 'react-native';
 
+/**
+ * Responsible for rendering the button grid on the calculator
+ */
 export class CalcButtons extends Component {
 
     constructor(props) {
         super(props);
     }
 
+    /**
+     * Called when a button is pressed
+     * @param buttonName - The button that was pressed
+     * @param event - The event that was passed by react native
+     */
     onButtonClick(buttonName, event) {
         this.props.onClick(buttonName);
     }
 
+    /**
+     * Render the component
+     */
     render() {
 
+        // Compute the rows - this is because of the way flex grids need to render.
+        // We want 4 items per row, so we add 4 items to each row.
         let rows = [];
         let count = 0;
         let row = [];
@@ -34,12 +47,15 @@ export class CalcButtons extends Component {
             }
         }
 
+        // Return the actual components, iterate over each row,
+        // then iterate over each item in the row.
         return (
             <View style={styles.container}>
                 {rows.map(function(row, i) {
                     return (
                         <View key={i} style={styles.row}>
                             {row.map(function(button) {
+                                // Compute the style for the button
                                 let buttonStyle = {
                                     flex: 1,
                                     backgroundColor: '#bbbbbb',
@@ -50,6 +66,7 @@ export class CalcButtons extends Component {
                                 if (button == '=') {
                                     buttonStyle.backgroundColor = '#3D75DB';
                                 }
+                                // Render the button
                                 return (
                                     <TouchableNativeFeedback key={button} onPress={this.onButtonClick.bind(this, button)}>
                                         <View style={buttonStyle}>
