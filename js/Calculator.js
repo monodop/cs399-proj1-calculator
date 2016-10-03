@@ -9,22 +9,22 @@ import {
     Text,
     View
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 export class Calculator extends Component {
+
+    onSettingsClicked() {
+        // TODO: Open Settings Menu
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <Icon.ToolbarAndroid
                     style={styles.toolbar}
                     title="Clackulator"
-                    actions={[
-                        {
-                            title: 'Settings',
-                            show: 'always',
-                            iconName: 'md-settings'
-                        }
-                    ]}
+                    navIconName="bars"
+                    onIconClicked={this.onSettingsClicked}
                 />
                 <Text style={styles.welcome}>
                     Welcome to React Native! Hello, I am harrison!
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         padding: 100
     },
     toolbar: {
-        height: 50,
+        height: 56,
         backgroundColor: '#e9eaed'
     }
 });
