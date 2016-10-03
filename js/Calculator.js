@@ -20,7 +20,8 @@ export class Calculator extends Component {
         super(props);
 
         this.state = {
-            currentEquation: "17+32"
+            currentEquation: "17+32",
+            isResult: false
         };
     }
 
@@ -28,25 +29,55 @@ export class Calculator extends Component {
         // TODO: Open Settings Menu
     }
 
+    calculateResult(exp) {
+        let res = null;
+        if (exp === null || exp.length > 0) {
+            try {
+                eval("res=" + exp);
+            } catch (e) {
+                res = null;
+            }
+        }
+        return res;
+    }
+
     onCalcButtonClick(buttonName) {
         if (buttonName == "DEL") {
-            if (this.state.currentEquation.length > 0) {
+            if (this.state.currentEquation.includes("Infinity")) {
                 this.setState({
-                    currentEquation: this.state.currentEquation.substring(0, this.state.currentEquation.length - 1)
+                    currentEquation: "",
+                    isResult: false
+                });
+            }
+            else if (this.state.currentEquation.length > 0) {
+                this.setState({
+                    currentEquation: this.state.currentEquation.substring(0, this.state.currentEquation.length - 1),
+                    isResult: false
                 });
             }
         } else if (buttonName == "=") {
+            let res = this.calculateResult(this.state.currentEquation);
             this.setState({
-                currentEquation: ""
+                currentEquation: res !== null ? res.toString() : "",
+                isResult: true
             });
         } else if (buttonName == "C") {
             this.setState({
-                currentEquation: ""
+                currentEquation: "",
+                isResult: false
             });
         } else {
-            this.setState({
-                currentEquation: this.state.currentEquation + buttonName
-            });
+            if (this.state.currentEquation.includes("Infinity")) {
+                this.setState({
+                    currentEquation: buttonName,
+                    isResult: false
+                });
+            } else {
+                this.setState({
+                    currentEquation: this.state.currentEquation + buttonName,
+                    isResult: false
+                });
+            }
         }
     }
 
@@ -83,7 +114,11 @@ export class Calculator extends Component {
                     navIconName="bars"
                     onIconClicked={this.onSettingsClicked.bind(this)}
                 />
-                <CalcScreen value={this.state.currentEquation}/>
+                <CalcScreen
+                    value={this.state.currentEquation}
+                    isResult={this.state.isResult}
+                    calcFunction={this.calculateResult.bind(this)}
+                />
                 <TouchableNativeFeedback>
                     <View style={styles.historyButton}>
                         <Text style={styles.historyButtonText}>History</Text>

@@ -15,24 +15,32 @@ export class CalcScreen extends Component {
 
     render() {
         let displayText = this.props.value;
-        let evald = " ";
-        if (this.props.value.length > 0) {
-            try {
-                eval("evald=" + this.props.value);
-            } catch (e) {
-                evald=" ";
-            }
+        if (this.props.isResult && displayText.length == 0) {
+            displayText = "Syntax Error";
+        } else if (displayText.includes("Infinity")) {
+            displayText = "Error: Division by zero";
+        }
+        let evald = this.props.calcFunction(this.props.value);
+        if (evald === null) {
+            evald = " ";
+        }
+        if (evald.toString().includes("Infinity")) {
+            evald = "Error: Division by zero";
         }
         return (
             <View style={styles.container}>
                 <Text style={styles.text}>{displayText}</Text>
-                <Text style={styles.preview}>{evald}</Text>
+                {this.props.isResult ? null :
+                    <Text style={styles.preview}>{evald}</Text>
+                }
             </View>
         );
     }
 }
 CalcScreen.propTypes = {
-    value: React.PropTypes.string.isRequired
+    value: React.PropTypes.string,
+    isResult: React.PropTypes.bool.isRequired,
+    calcFunction: React.PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({
